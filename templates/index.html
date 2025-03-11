@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Les Chats De SeaTech - Votre guide félin pour l'école d'ingénieurs de l'Université de Toulon">
+    <title>Les Chats De SeaTech</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/seatech_logo.png') }}" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar card">
+            <div class="sidebar-header">
+                <h2>Les Chats De SeaTech</h2>
+                <div class="cats-logo">
+                    <img src="{{ url_for('static', filename='img/franky.png') }}" alt="Franky" class="cat-avatar" loading="lazy">
+                    <img src="{{ url_for('static', filename='img/freddy.png') }}" alt="Freddy" class="cat-avatar" loading="lazy">
+                </div>
+            </div>
+            <nav>
+                <div class="sidebar-section">
+                    <h3>Liens SeaTech</h3>
+                    <ul>
+                        <li><a href="https://seatech.univ-tln.fr/" target="_blank" rel="noopener">SeaTech Officiel</a></li>
+                        <li><a href="https://www.univ-tln.fr/" target="_blank" rel="noopener">Université de Toulon</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h3>Formations</h3>
+                    <ul>
+                        <li><a href="https://seatech.univ-tln.fr/devenir-ingenieur" target="_blank" rel="noopener">Devenir Ingénieur</a></li>
+                        <li><a href="https://seatech.univ-tln.fr/Formation-d-ingenieurs-Materiaux-par-apprentissage.html" target="_blank" rel="noopener">Matériaux (Apprentissage)</a></li>
+                        <li><a href="https://seatech.univ-tln.fr/Formation-d-ingenieurs-en-systemes-numeriques-par-apprentissage.html" target="_blank" rel="noopener">Systèmes Numériques (Apprentissage)</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h3>Informations</h3>
+                    <ul>
+                        <li><a href="https://seatech.univ-tln.fr/recherche" target="_blank" rel="noopener">Recherche</a></li>
+                        <li><a href="https://seatech.univ-tln.fr/international" target="_blank" rel="noopener">International</a></li>
+                        <li><a href="https://seatech.univ-tln.fr/Contacts.html" target="_blank" rel="noopener">Contacts</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <p>Posez-moi vos questions sur SeaTech!</p>
+            </div>
+        </aside>
+
+        <!-- Contenu principal -->
+        <main class="container">
+            <header class="header">
+                <div class="logo-container">
+                    <img src="{{ url_for('static', filename='img/seatech_logo.png') }}" alt="Logo SeaTech" class="logo" width="250" height="auto">
+                </div>
+                <h1>Les Chats De SeaTech</h1>
+                <p class="subtitle">Votre guide félin pour l'école d'ingénieurs de l'Université de Toulon</p>
+            </header>
+            <section class="chat-container">
+                <div class="chat-history" id="chatHistory">
+                    <article class="message bot-message">
+                        <div class="message-avatar">
+                            <img src="{{ url_for('static', filename='img/franky.png') }}" alt="Franky" class="avatar" loading="lazy">
+                        </div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <strong>Franky</strong>
+                            </div>
+                            <p>Miaaaou ! Je suis <strong>Franky</strong>, votre guide félin de SeaTech ! 🐱 Mon ami <strong>Freddy</strong> et moi sommes là pour vous aider. Posez-moi n'importe quelle question sur l'école et je vous répondrai avec précision, pendant que Freddy fouille dans les documents officiels pour trouver les informations pertinentes.</p>
+                        </div>
+                    </article>
+                    
+                    {% if conversation %}
+                        {% for msg in conversation %}
+                            <article class="message {% if msg.role == 'user' %}user-message{% else %}bot-message{% endif %}">
+                                {% if msg.role != 'user' %}
+                                <div class="message-avatar">
+                                    <img src="{{ url_for('static', filename='img/franky.png') }}" alt="Franky" class="avatar" loading="lazy">
+                                </div>
+                                {% endif %}
+                                <div class="message-content">
+                                    {% if msg.role != 'user' %}
+                                    <div class="message-header">
+                                        <strong>Franky</strong>
+                                        <div class="message-actions">
+                                            <button class="show-sources-btn" aria-label="Afficher les sources"><i class="fas fa-file-alt"></i> Sources</button>
+                                            {% if msg.processing_time %}
+                                            <span class="processing-time">{{ msg.processing_time }}</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    {{ msg.content | safe }}
+                                </div>
+                                {% if msg.role == 'user' %}
+                                <div class="message-avatar">
+                                    <img src="{{ url_for('static', filename='img/user.png') }}" alt="User" class="avatar" loading="lazy">
+                                </div>
+                                {% endif %}
+                            </article>
+                        {% endfor %}
+                    {% else %}
+                        <div class="no-messages">Aucun message pour le moment. Commencez à poser vos questions !</div>
+                    {% endif %}
+                </div>
+                
+                <div class="loading" id="loadingIndicator">
+                    <div class="loading-container">
+                        <img src="{{ url_for('static', filename='img/searching-cat.gif') }}" alt="Chat qui cherche" class="searching-cat">
+                        <span id="loadingText">Je demande à Freddy<span class="loading-dots"></span></span>
+                    </div>
+                </div>
+                
+                <form class="chat-form" id="chatForm" method="POST" action="/">
+                    <div class="chat-input-container">
+                        <img src="{{ url_for('static', filename='img/cat_walking.png') }}" alt="Chat qui marche" class="cat-walking">
+                        <input type="text" name="query" id="queryInput" class="chat-input" placeholder="Posez votre question sur SeaTech..." required autocomplete="off" aria-label="Votre question">
+                    </div>
+                    <button type="submit" class="send-button">
+                        Envoyer
+                        <img src="{{ url_for('static', filename='img/cat-icon.png') }}" alt="Chat" class="cat-icon" width="20" height="20">
+                    </button>
+                </form>
+            </section>
+        </main>
+        
+        <!-- Panneau des sources (caché par défaut) -->
+        <aside class="sources-panel" id="sourcesPanel" aria-hidden="true">
+            <div class="sources-header">
+                <h3>Sources consultées par Freddy</h3>
+                <button id="closeSourcesBtn" class="close-btn" aria-label="Fermer le panneau des sources">×</button>
+            </div>
+            <div class="sources-content" id="sourcesContent">
+                <!-- Sources insérées dynamiquement -->
+            </div>
+        </aside>
+        
+        <!-- Panneau de Freddy (toujours visible) -->
+        <aside class="freddy-panel card">
+            <div class="freddy-header">
+                <h3>
+                    <img src="{{ url_for('static', filename='img/freddy.png') }}" alt="Freddy" loading="lazy">
+                    Recherche par Freddy
+                </h3>
+            </div>
+            <div class="freddy-content">
+                <div class="freddy-intro">
+                    <img src="{{ url_for('static', filename='img/freddy.png') }}" alt="Freddy" loading="lazy">
+                    <div>
+                        <p><strong>Miaaaou !</strong> Je suis <strong>Freddy</strong>, l'assistant de recherche de SeaTech.</p>
+                        <p>Je fouille dans les documents pour trouver les informations les plus pertinentes !</p>
+                    </div>
+                </div>
+                
+                <div class="freddy-logs-title">
+                    <i class="fas fa-search"></i> Analyse de la recherche
+                </div>
+                <div id="freddyLogs" class="freddy-logs">
+                    <div class="freddy-log-entry">
+                        <span class="log-time">{{ current_datetime.strftime('%H:%M:%S') }}</span>
+                        <span class="log-action">En attente d'une question...</span>
+                    </div>
+                </div>
+                
+                <div class="freddy-sources-title">
+                    <i class="fas fa-file-alt"></i> Sources consultées
+                </div>
+                <div id="freddySources" class="freddy-sources-container">
+                    <div class="freddy-source-block">
+                        <div class="freddy-source-header">
+                            <span class="source-name">Informations SeaTech</span>
+                            <span class="medium-relevance">En attente...</span>
+                        </div>
+                        <div class="freddy-source-content">
+                            Posez une question pour que je puisse chercher des informations pertinentes dans ma base de connaissances.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+    
+    <footer class="footer">
+        <p>&copy; {{ current_datetime.year }} École d'ingénieurs SeaTech - Université de Toulon | Tous droits réservés</p>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatForm = document.getElementById('chatForm');
+            const chatHistory = document.getElementById('chatHistory');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const queryInput = document.getElementById('queryInput');
+            const loadingText = document.getElementById('loadingText');
+            const sourcesPanel = document.getElementById('sourcesPanel');
+            const sourcesContent = document.getElementById('sourcesContent');
+            const closeSourcesBtn = document.getElementById('closeSourcesBtn');
+            const freddyLogs = document.getElementById('freddyLogs');
+            const freddySources = document.getElementById('freddySources');
+
+            const loadingMessages = [
+                "Freddy fouille dans les archives...",
+                "Freddy déchiffre les acronymes de SeaTech... 🐱",
+                "Freddy explore les données de l'école...",
+                "Miaaaou! Freddy a repéré une information intéressante...",
+                "Freddy chasse les informations pertinentes... 🐾",
+                "Les moustaches de Freddy frémissent... il est sur une piste!"
+            ];
+
+            // Extraction des sources du HTML
+            function extractSources(html) {
+                if (!html) return null;
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const sourcesContainer = doc.querySelector('.sources-container');
+                if (sourcesContainer) {
+                    return sourcesContainer.innerHTML;
+                }
+                return null;
+            }
+            
+            // Mise à jour du contenu de Freddy
+            function updateFreddyContent(html) {
+                if (!html) return;
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const logsSection = doc.querySelector('.freddy-logs');
+                if (logsSection) {
+                    freddyLogs.innerHTML = logsSection.innerHTML;
+                }
+                const sourcesSection = doc.querySelector('.freddy-sources-container');
+                if (sourcesSection) {
+                    freddySources.innerHTML = sourcesSection.innerHTML;
+                }
+            }
+
+            // Fermeture du panneau des sources
+            closeSourcesBtn.addEventListener('click', function() {
+                sourcesPanel.classList.remove('active');
+                sourcesPanel.setAttribute('aria-hidden', 'true');
+            });
+
+            let messageIndex = 0;
+            let loadingInterval;
+            
+            // Mise à jour des messages de chargement
+            function updateLoadingMessage() {
+                loadingText.innerHTML = `${loadingMessages[messageIndex]}<span class="loading-dots"></span>`;
+                messageIndex = (messageIndex + 1) % loadingMessages.length;
+            }
+
+            // Défilement automatique vers le bas
+            function scrollToBottom() {
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }
+
+            scrollToBottom();
+
+            // Initialisation des boutons d'affichage des sources
+            function initButtons() {
+                document.querySelectorAll('.show-sources-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        sourcesPanel.classList.add('active');
+                        sourcesPanel.setAttribute('aria-hidden', 'false');
+                    });
+                });
+            }
+            
+            initButtons();
+
+            // Gestion de la soumission du formulaire
+            chatForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const query = queryInput.value.trim();
+                if (!query) return;
+                
+                // Création du message utilisateur
+                const userMessageDiv = document.createElement('article');
+                userMessageDiv.className = 'message user-message';
+                userMessageDiv.innerHTML = `
+                    <div class="message-content">${query}</div>
+                    <div class="message-avatar">
+                        <img src="${window.location.origin}/static/img/user.png" alt="User" class="avatar" loading="lazy">
+                    </div>
+                `;
+                chatHistory.appendChild(userMessageDiv);
+                scrollToBottom();
+                
+                // Affichage de l'indicateur de chargement
+                loadingIndicator.style.display = 'block';
+                messageIndex = 0;
+                updateLoadingMessage();
+                loadingInterval = setInterval(updateLoadingMessage, 2000);
+                
+                // Envoi de la requête au serveur
+                fetch('/api/ask', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ query: query }),
+                    credentials: 'same-origin'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    clearInterval(loadingInterval);
+                    loadingIndicator.style.display = 'none';
+                    
+                    // Traitement des sources
+                    const sourcesHtml = data.sources || extractSources(data.response);
+                    let cleanResponse = data.response;
+                    
+                    if (sourcesHtml && cleanResponse.includes("sources-container")) {
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = cleanResponse;
+                        const sourcesContainer = tempDiv.querySelector('.sources-container');
+                        if (sourcesContainer) {
+                            sourcesContainer.remove();
+                            cleanResponse = tempDiv.innerHTML;
+                        }
+                    }
+                    
+                    if (sourcesHtml) {
+                        sourcesContent.innerHTML = sourcesHtml;
+                    }
+                    
+                    // Mise à jour des logs Freddy
+                    if (data.freddy_logs) {
+                        updateFreddyContent(data.freddy_logs);
+                    }
+                    
+                    // Création du message bot
+                    const botMessageDiv = document.createElement('article');
+                    botMessageDiv.className = 'message bot-message';
+                    botMessageDiv.innerHTML = `
+                        <div class="message-avatar">
+                            <img src="${window.location.origin}/static/img/franky.png" alt="Franky" class="avatar" loading="lazy">
+                        </div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <strong>Franky</strong>
+                                <div class="message-actions">
+                                    ${sourcesHtml ? '<button class="show-sources-btn" aria-label="Afficher les sources"><i class="fas fa-file-alt"></i> Sources</button>' : ''}
+                                    ${data.processing_time ? '<span class="processing-time">' + data.processing_time + '</span>' : ''}
+                                </div>
+                            </div>
+                            ${cleanResponse}
+                        </div>
+                    `;
+                    
+                    chatHistory.appendChild(botMessageDiv);
+                    queryInput.value = '';
+                    queryInput.focus();
+                    scrollToBottom();
+                    initButtons();
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    clearInterval(loadingInterval);
+                    loadingIndicator.style.display = 'none';
+                    
+                    // Message d'erreur
+                    const errorDiv = document.createElement('article');
+                    errorDiv.className = 'message bot-message';
+                    errorDiv.innerHTML = `
+                        <div class="message-avatar">
+                            <img src="${window.location.origin}/static/img/franky.png" alt="Franky" class="avatar" loading="lazy">
+                        </div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <strong>Franky</strong>
+                            </div>
+                            <p>Désolé, une erreur s'est produite pendant la recherche. Veuillez réessayer.</p>
+                        </div>
+                    `;
+                    chatHistory.appendChild(errorDiv);
+                    scrollToBottom();
+                });
+            });
+        });
+    </script>
+</body>
+</html>

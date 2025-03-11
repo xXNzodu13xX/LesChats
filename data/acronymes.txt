@@ -1,0 +1,35 @@
+=== Acronymes SeaTech ===
+
+SN     : Systèmes Numériques
+APP    : Apprentissage
+FISE   : Formation Initiale Sous Statut d'Étudiant
+FISA   : Formation Initiale Sous Statut d'Apprenti
+MTX    : Matériaux
+GM     : Génie Maritime
+MI     : Mécanique et Innovation
+IR     : Informatique et Réseaux
+MS     : Modélisation et Simulation
+MR     : Mécatronique et Robotique
+MAPIEM : Matériaux Polymères-Interfaces-Environnement Marin
+IMATH  : Institut de Mathématiques de Toulon
+LSIS   : Laboratoire des Sciences de l’Information et des Systèmes
+MIO    : Institut Méditerranéen d’Océanographie
+CTI    : Commission des Titres d’Ingénieur
+CFA    : Centre de Formation d’Apprentis
+UTLN   : Université de Toulon
+
+=== Formations et Parcours SeaTech ===
+
+- Diplôme SeaTech (formation d’ingénieur généraliste avec 6 parcours)
+- Diplôme SeaTech spécialité Matériaux (en apprentissage)
+- Diplôme SeaTech spécialité Systèmes numériques (en apprentissage ou formation continue)
+
+Parcours de formation proposés :
+• Génie Maritime
+• Ingénierie et Sciences des Données, Information, Systèmes (IRIS)
+• Innovation Mécanique pour des Systèmes Durables
+• Matériaux, Durabilité et Environnement
+• Modélisation et Calculs Fluides-Structures (MOCA)
+• Systèmes Mécatroniques et Robotiques (SYSMER)
+
+Ce fichier est basé sur la base de données SeaTech disponible (&#8203;:contentReference[oaicite:0]{index=0}) et vise à aider le chatbot à comprendre et à associer les acronymes ainsi que les formations et parcours proposés par SeaTech.
